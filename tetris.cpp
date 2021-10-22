@@ -1,6 +1,5 @@
 #include <windows.h>
 #include <stdint.h>
-#include <iostream>
 
 #include "logic.h"
 #include "graphics.h"
@@ -57,10 +56,8 @@ LRESULT CALLBACK MainWindowCallback(
                 {
                     if(SingleKeystroke)
                     {
-                        ShowCursor(true);
                         DisplayMenu();
-                        DisplayPauseBox();
-                        ShowCursor(false);  
+                        DisplayPauseBox();  
                     }
                     break;
                 }

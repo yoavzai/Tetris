@@ -266,12 +266,10 @@ void NewGameRoutine()
     DisplayGame();
     DisplayControlsBox();
     // add option to pick starting level
-    ShowCursor(false);
 }
 
 void GameOverRoutine()
 {
-    ShowCursor(true);
     if (Game.Score > Game.BestScore)
     {
         Game.BestScore = Game.Score;
