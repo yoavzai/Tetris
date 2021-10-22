@@ -9,34 +9,19 @@
 
 Game_t Game;
 
-static void FillSubGrid(PieceGrid_t PieceGrid, int GameGridRow, int GameGridCol)
-{
-    for (int i = 0, x = GameGridRow; i < PIECE_GRID_ROWS; ++i, ++x)
-    {
-        for (int j = 0, y = GameGridCol; j < PIECE_GRID_COLS; ++j, ++y)
-        {
-            PieceGrid[i][j] = Game.GameGrid[x][y];
-        }
-    } 
-}
-
 bool IsValidLocation(const Piece_t * Piece)
 {
-
-    PieceGrid_t GameSubGrid;
-    FillSubGrid(GameSubGrid, Piece->Location.Row, Piece->Location.Col);
-
-    for (int i = 0; i < PIECE_GRID_ROWS; ++i)
+    for (int i = 0, x = Piece->Location.Row; i < PIECE_GRID_ROWS; ++i, ++x)
     {
-        for (int j = 0; j < PIECE_GRID_COLS; ++j)
+        for (int j = 0, y = Piece->Location.Col; j < PIECE_GRID_COLS; ++j, ++y)
         {
-            if (Piece->Grid[i][j] && GameSubGrid[i][j])
+            if (Piece->Grid[i][j] && Game.GameGrid[x][y])
             {
                 return false;
             }
-            
         }
     } 
+
     return true;
 }
 
@@ -205,16 +190,11 @@ static void UpdateGameStats()
     static uint8_t CurLevelLineCount = 0;
     Game.Score += 1;            
     CurLevelLineCount += 1;
-    if (Game.Level < NUM_OF_LEVELS-1)
+    if (Game.Level < NUM_OF_LEVELS-1 && CurLevelLineCount >= LINES_PER_LEVEL)
     {
-        if (CurLevelLineCount >= LINES_PER_LEVEL)
-        {
-            CurLevelLineCount -= LINES_PER_LEVEL;
-            Game.Level += 1;
-        }
-            
+        CurLevelLineCount -= LINES_PER_LEVEL;
+        Game.Level += 1;           
     }
-    
 }
 
 static void DropRows(int DestRow)
@@ -284,7 +264,8 @@ void NewGameRoutine()
 {
     InitNewGame();
     DisplayGame();
-    DisplayControlBox();
+    DisplayControlsBox();
+    // add option to pick starting level
     ShowCursor(false);
 }
 

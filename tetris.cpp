@@ -20,7 +20,6 @@ LRESULT CALLBACK MainWindowCallback(
         case WM_PAINT:
         {
             PAINTSTRUCT Paint = {};
-            HDC DeviceContext = BeginPaint(Window, &Paint);
             BeginPaint(Window, &Paint);
             if (Game.Over)
             {
@@ -68,24 +67,27 @@ LRESULT CALLBACK MainWindowCallback(
 
                 case ('X'):
                 {
-                    if(SingleKeystroke && Game.CurPiece.RotateClockwise(&Game.CurPiece))
+                    if (SingleKeystroke)
                     {
+                        Game.CurPiece.RotateClockwise(&Game.CurPiece);
                         DisplayGame();
                     }
                     break;
                 }
                 case ('Z'):
                 {
-                    if(SingleKeystroke && Game.CurPiece.RotateCounterClockwise(&Game.CurPiece))
+                    if(SingleKeystroke)
                     {
+                        Game.CurPiece.RotateCounterClockwise(&Game.CurPiece);
                         DisplayGame();
                     }
                     break;
                 }
                 case (VK_UP):
                 {
-                    if(SingleKeystroke && Game.CurPiece.RotateCounterClockwise(&Game.CurPiece))
+                    if(SingleKeystroke)
                     {
+                        Game.CurPiece.RotateCounterClockwise(&Game.CurPiece);
                         DisplayGame();
                     }
                     break;
@@ -101,16 +103,18 @@ LRESULT CALLBACK MainWindowCallback(
                 }
                 case (VK_LEFT):
                 {
-                    if(SingleKeystroke && Game.CurPiece.MoveLeft(&Game.CurPiece))
-                    {              
+                    if(SingleKeystroke)
+                    {        
+                        Game.CurPiece.MoveLeft(&Game.CurPiece);      
                         DisplayGame();
                     }                        
                     break;
                 }
                 case (VK_RIGHT):
                 {
-                    if(SingleKeystroke && Game.CurPiece.MoveRight(&Game.CurPiece))
+                    if(SingleKeystroke)
                     {
+                        Game.CurPiece.MoveRight(&Game.CurPiece);
                         DisplayGame();
                     }                        
                     break;
@@ -149,7 +153,6 @@ int CALLBACK WinMain(
     while (Game.Running)
     {
         NewGameRoutine();
-
         while (!Game.Over)
         {
             DisplayGame();

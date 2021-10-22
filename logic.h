@@ -44,6 +44,7 @@
 #define T_COLOR 0x0000D800
 #define WHITE_COLOR 0x00FFFFFF
 
+// Color idx to use in game grid
 #define BACKGROUND_COLOR_IDX 0
 #define BORDER_COLOR_IDX 1
 #define Z_COLOR_IDX 2
@@ -83,7 +84,7 @@ struct Piece
     /*
     all bellow functions update the piece only if it is legal.
     return value: true if action was legal and piece was updated to the new state,
-    false if action was illegal and piece state didn't change
+    false if action was illegal and piece state didn't change.
     */
     bool (*MoveLeft)(Piece_t*);
     bool (*MoveRight)(Piece_t*);

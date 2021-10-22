@@ -241,6 +241,11 @@ void DisplayMenu()
 
 void DisplayGame()
 {
+    /* 
+    TODO: try and remove InitSideGrid() from here
+    because this function is used frequently
+    */
+   
     InitSideGrid();
     AddScoreToSideGrid();
     AddSideGridNextText();
@@ -250,7 +255,7 @@ void DisplayGame()
     PrintSideGrid();
 }
 
-void DisplayControlBox()
+void DisplayControlsBox()
 {
     MessageBoxW(Game.Window, L"\
     \u2190  -  MOVE LEFT\n\

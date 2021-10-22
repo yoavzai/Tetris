@@ -10,7 +10,7 @@
 
 void DisplayGame();
 void DisplayMenu();
-void DisplayControlBox();
+void DisplayControlsBox();
 void DisplayGameOverBox();
 void DisplayNewBestBox();
 void DisplayPauseBox();
