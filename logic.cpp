@@ -5,15 +5,15 @@
 
 #include "logic.h"
 #include "graphics.h"
+#include "init.h"
 
 Game_t Game;
-
 
 static void FillSubGrid(PieceGrid_t PieceGrid, int GameGridRow, int GameGridCol)
 {
     for (int i = 0, x = GameGridRow; i < PIECE_GRID_ROWS; ++i, ++x)
     {
-        for (int j = 0, y = GameGridCol; j < PIECE_GRID_COLUMNS; ++j, ++y)
+        for (int j = 0, y = GameGridCol; j < PIECE_GRID_COLS; ++j, ++y)
         {
             PieceGrid[i][j] = Game.GameGrid[x][y];
         }
@@ -28,7 +28,7 @@ bool IsValidLocation(const Piece_t * Piece)
 
     for (int i = 0; i < PIECE_GRID_ROWS; ++i)
     {
-        for (int j = 0; j < PIECE_GRID_COLUMNS; ++j)
+        for (int j = 0; j < PIECE_GRID_COLS; ++j)
         {
             if (Piece->Grid[i][j] && GameSubGrid[i][j])
             {
@@ -170,7 +170,7 @@ void AddPieceToGameGrid(const Piece_t Piece)
 {
     for (int i = 0, x = Piece.Location.Row; i < PIECE_GRID_ROWS; ++i, ++x)
     {
-        for (int j = 0, y = Piece.Location.Col; j < PIECE_GRID_COLUMNS; ++j, ++y)
+        for (int j = 0, y = Piece.Location.Col; j < PIECE_GRID_COLS; ++j, ++y)
         {
             if (Piece.Grid[i][j])
             {
@@ -182,7 +182,7 @@ void AddPieceToGameGrid(const Piece_t Piece)
 
 static void CopyRow(int DestRow, const int SrcRow)
 {
-    for (int Col = GAME_GRID_PAD; Col <GAME_GRID_COLUMNS+GAME_GRID_PAD; ++Col)
+    for (int Col = GAME_GRID_PAD; Col <GAME_GRID_COLS+GAME_GRID_PAD; ++Col)
     {
         Game.GameGrid[DestRow][Col] = Game.GameGrid[SrcRow][Col];
     } 
@@ -190,7 +190,7 @@ static void CopyRow(int DestRow, const int SrcRow)
 
 static bool RowOcupied(int Row)
 {
-    for (int Col = GAME_GRID_PAD; Col < GAME_GRID_COLUMNS+GAME_GRID_PAD; ++Col)
+    for (int Col = GAME_GRID_PAD; Col < GAME_GRID_COLS+GAME_GRID_PAD; ++Col)
     {
         if (Game.GameGrid[Row][Col])
         {
@@ -231,7 +231,7 @@ static void DropRows(int DestRow)
 
 static void ClearRow(int Row)
 {
-    for (int Col = GAME_GRID_PAD; Col < GAME_GRID_COLUMNS+GAME_GRID_PAD; ++Col)
+    for (int Col = GAME_GRID_PAD; Col < GAME_GRID_COLS+GAME_GRID_PAD; ++Col)
     {
         Game.GameGrid[Row][Col] = 0;
     }
@@ -240,7 +240,7 @@ static void ClearRow(int Row)
 static bool RowIsFull(int Row)
 {
     int NumOfOcupiedSquares = 0;
-    for (int Col = GAME_GRID_PAD; Col <GAME_GRID_COLUMNS+GAME_GRID_PAD; ++Col)
+    for (int Col = GAME_GRID_PAD; Col <GAME_GRID_COLS+GAME_GRID_PAD; ++Col)
     {
         if (Game.GameGrid[Row][Col])
         {
@@ -248,7 +248,7 @@ static bool RowIsFull(int Row)
         }
     }
 
-    return (NumOfOcupiedSquares == GAME_GRID_COLUMNS);
+    return (NumOfOcupiedSquares == GAME_GRID_COLS);
 }
 
 void ClearFullRows()
@@ -268,7 +268,7 @@ void EndOfTurnRoutine()
 {
     if (!IsValidLocation(&Game.CurPiece))
     {
-        Game.Running = false;
+        Game.Over = true;
     }
 
     else if (!Game.CurPiece.PushDown(&Game.CurPiece))
@@ -280,3 +280,26 @@ void EndOfTurnRoutine()
     }
 }
 
+void NewGameRoutine()
+{
+    InitNewGame();
+    DisplayGame();
+    DisplayControlBox();
+    ShowCursor(false);
+}
+
+void GameOverRoutine()
+{
+    ShowCursor(true);
+    if (Game.Score > Game.BestScore)
+    {
+        Game.BestScore = Game.Score;
+        DisplayMenu();
+        DisplayNewBestBox();
+    }
+    else
+    {
+        DisplayMenu();
+        DisplayGameOverBox();
+    }
+}

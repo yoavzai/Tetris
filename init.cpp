@@ -2,27 +2,45 @@
 #include "logic.h"
 #include "graphics.h"
 
-static void InitGameGrid()
+
+static void SetGameGridBackGround()
 {
-    int i = 0;
-    int j = 0;
-    for (i = GAME_GRID_PAD; i < GAME_GRID_ROWS + GAME_GRID_PAD; ++i)
+    for (int Row = 0; Row < GAME_GRID_ROWS + 2*GAME_GRID_PAD; ++Row)
     {
-        for (j = 0; j < GAME_GRID_COLUMNS + 2*GAME_GRID_PAD; ++j)
+        for (int Col = 0; Col < GAME_GRID_COLS + 2*GAME_GRID_PAD; ++Col)
         {
-            if (j < GAME_GRID_PAD || j >= GAME_GRID_COLUMNS + GAME_GRID_PAD)
+            Game.GameGrid[Row][Col] = BACKGROUND_COLOR_IDX;
+        }
+    }
+}
+
+static void SetGameGridPads()
+{
+    int Row;
+    int Col;
+    for (Row = GAME_GRID_PAD; Row < GAME_GRID_ROWS + GAME_GRID_PAD; ++Row)
+    {
+        for (Col = 0; Col < GAME_GRID_COLS + 2*GAME_GRID_PAD; ++Col)
+        {
+            if (Col < GAME_GRID_PAD || Col >= GAME_GRID_COLS + GAME_GRID_PAD)
             {
-                Game.GameGrid[i][j] = 1;
+                Game.GameGrid[Row][Col] = BORDER_COLOR_IDX;
             }
         }
     }
-    for (i; i < GAME_GRID_ROWS + 2*GAME_GRID_PAD; ++i)
+    for (Row; Row < GAME_GRID_ROWS + 2*GAME_GRID_PAD; ++Row)
     {
-        for (j = 0; j < GAME_GRID_COLUMNS + 2*GAME_GRID_PAD; ++j)
+        for (Col = 0; Col < GAME_GRID_COLS + 2*GAME_GRID_PAD; ++Col)
         {
-            Game.GameGrid[i][j] = 1;
+            Game.GameGrid[Row][Col] = BORDER_COLOR_IDX;
         }
     }
+}
+
+static void InitGameGrid()
+{
+    SetGameGridBackGround();
+    SetGameGridPads();
 }
 
 static void InitWindow(HINSTANCE ProcInstance, WNDPROC MessagesCallbackFunc)
@@ -42,7 +60,7 @@ static void InitWindow(HINSTANCE ProcInstance, WNDPROC MessagesCallbackFunc)
         WindowClass.lpszClassName, //ClassName
         "Tetris Window", // WindowName
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE, // Style
-        CW_USEDEFAULT, CW_USEDEFAULT, 720, 690, // Position
+        330, 30, 720, 690, // Position
         0, // Parent
         0, // Menu
         ProcInstance, // ModuleInstance
@@ -58,6 +76,11 @@ static void InitWindow(HINSTANCE ProcInstance, WNDPROC MessagesCallbackFunc)
 
 static void InitPieces()
 {
+    /*
+    the zeros in the pieces grid initiation should be equal to BACKGROUND_COLOR_IDX
+    ive used 0 so it wont look to messy. and also, all the logic is based on that 0
+    is an empty spot, and not 0 is ocupied.
+    */
     Game.Pieces[Z_IDX] = {
         PIECE_STARTING_LOCATION,
         {{0,0,0,0},
@@ -156,7 +179,7 @@ static void AddSideGridUpperBorder()
     {
         for (int Col = 0; Col < SIDE_GRID_COLS; ++Col)
         {
-            Game.SideGrid[Row][Col] = 1;
+            Game.SideGrid[Row][Col] = BORDER_COLOR_IDX;
         }
     }
 }
@@ -167,7 +190,7 @@ static void AddSideGridMiddleBorder()
     {
         for (int Col = 0; Col < SIDE_GRID_COLS; ++Col)
         {
-            Game.SideGrid[Row][Col] = 1;
+            Game.SideGrid[Row][Col] = BORDER_COLOR_IDX;
         }
     }
 }
@@ -178,7 +201,7 @@ static void AddSideGridLowerBorder()
     {
         for (int Col = 0; Col < SIDE_GRID_COLS; ++Col)
         {
-            Game.SideGrid[Row][Col] = 1;
+            Game.SideGrid[Row][Col] = BORDER_COLOR_IDX;
         }
     }
 }
@@ -189,7 +212,7 @@ static void AddSideGridSideBorder()
     {
         for (int Col = 21; Col < 23; ++Col)
         {
-            Game.SideGrid[Row][Col] = 1;
+            Game.SideGrid[Row][Col] = BORDER_COLOR_IDX;
         } 
     }
 }
@@ -212,32 +235,25 @@ static void AddSideGridScoreText()
     }
 }
 
-static void AddSideGridNextText()
+static void SetSideGridBackGround()
 {
-    uint8_t NextText[5][21] = {
-    {0,0,9,9,0,0,9,0,9,9,9,0,9,0,9,0,9,9,9,0,0},
-    {0,0,9,9,0,0,9,0,9,0,0,0,9,0,9,0,0,9,0,0,0},
-    {0,0,9,0,9,0,9,0,9,9,9,0,0,9,0,0,0,9,0,0,0},
-    {0,0,9,0,0,9,9,0,9,0,0,0,9,0,9,0,0,9,0,0,0},
-    {0,0,9,0,0,9,9,0,9,9,9,0,9,0,9,0,0,9,0,0,0}};
-
-    for (int i = 0, Row = 27; i < 5; ++i, ++Row)
+    for (int Row = 0; Row < SIDE_GRID_ROWS; ++Row)
     {
-        for (int j = 0, Col = 0; j < 21; ++j, ++Col)
+        for (int Col = 0; Col < SIDE_GRID_COLS; ++Col)
         {
-            Game.SideGrid[Row][Col] = NextText[i][j];
-        } 
-    }
+            Game.SideGrid[Row][Col] = BACKGROUND_COLOR_IDX;
+        }
+    }  
 }
 
-static void InitSideGrid()
+void InitSideGrid()
 {
+    SetSideGridBackGround();
     AddSideGridUpperBorder();
     AddSideGridMiddleBorder();
     AddSideGridLowerBorder();
     AddSideGridSideBorder();
     AddSideGridScoreText();
-    AddSideGridNextText();
 }
 
 static void InitLevelTimeTable()
@@ -268,17 +284,24 @@ static void InitColorTable()
     Game.ColorTable[WHITE_COLOR_IDX] = WHITE_COLOR;
 }
 
+
+void InitNewGame()
+{
+    InitGameGrid();
+    Game.CurPiece = GetRandomPiece();
+    Game.NextPiece = GetRandomPiece();
+    Game.Score = 0;
+    Game.Level = 0;
+    Game.Over = false;
+}
+
+
 void InitGame(HINSTANCE ProcInstance, WNDPROC MessagesCallbackFunc)
 {
-    InitWindow(ProcInstance, MessagesCallbackFunc);
-    InitGameGrid();
-    InitSideGrid();
     InitPieces();
     InitLevelTimeTable();
     InitColorTable();
     Game.Running = true;
-    Game.CurPiece = GetRandomPiece();
-    Game.NextPiece = GetRandomPiece();
-    Game.Level = 0;
-    Game.Score = 0;
+    Game.BestScore = 0;
+    InitWindow(ProcInstance, MessagesCallbackFunc);
 }

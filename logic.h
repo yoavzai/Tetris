@@ -6,10 +6,10 @@
 
 // game grid data
 #define GAME_GRID_ROWS 20
-#define GAME_GRID_COLUMNS 10
+#define GAME_GRID_COLS 10
 #define GAME_GRID_PAD 4
 #define PIECE_GRID_ROWS 4
-#define PIECE_GRID_COLUMNS 4
+#define PIECE_GRID_COLS 4
 #define SIDE_GRID_COLS 23
 #define SIDE_GRID_ROWS 44
 
@@ -17,7 +17,7 @@
 #define NUM_OF_LEVELS 10
 #define NUM_OF_PIECES 7
 #define NUM_OF_COLORS 10
-#define LINES_PER_LEVEL 30
+#define LINES_PER_LEVEL 20
 #define PIECE_STARTING_LOCATION {2,7}
 
 // Piece drop time table in millisec
@@ -65,7 +65,7 @@
 #define T_IDX 6
 
 
-typedef uint8_t PieceGrid_t[PIECE_GRID_ROWS][PIECE_GRID_COLUMNS];
+typedef uint8_t PieceGrid_t[PIECE_GRID_ROWS][PIECE_GRID_COLS];
 typedef struct Piece Piece_t;
 typedef struct Coord Coord_t;
 typedef struct Game Game_t;
@@ -95,36 +95,38 @@ struct Piece
 struct Game
 {
     HWND Window;
-    uint8_t GameGrid[GAME_GRID_ROWS + 2*GAME_GRID_PAD][GAME_GRID_COLUMNS + 2*GAME_GRID_PAD];
+    uint8_t GameGrid[GAME_GRID_ROWS + 2*GAME_GRID_PAD][GAME_GRID_COLS + 2*GAME_GRID_PAD];
     uint8_t SideGrid[SIDE_GRID_ROWS][SIDE_GRID_COLS];
     Piece_t Pieces[NUM_OF_PIECES];
     uint32_t LevelTimeTable[NUM_OF_LEVELS];
     uint32_t ColorTable[NUM_OF_COLORS];
     bool Running;
+    bool Over;
     Piece_t CurPiece;
     Piece_t NextPiece;
     uint32_t EndOfTurnTime;
     uint8_t Level;
     uint16_t Score;
+    uint16_t BestScore;
 };
 
 extern Game_t Game;
 
-bool DefaultClockRot(Piece_t * Piece);
-bool DefaultCounterClockRot(Piece_t * Piece);
-bool IsValidLocation(const Piece_t * Piece);
-bool MoveLeft(Piece_t * Piece);
-bool MoveRight(Piece_t * Piece);
-bool PushDown(Piece_t * Piece);
-Piece_t GetRandomPiece();
+bool MoveLeft(Piece_t *Piece);
+bool MoveRight(Piece_t *Piece);
+bool PushDown(Piece_t *Piece);
+bool Z_Rotation(Piece_t *Piece);
+bool S_Rotation(Piece_t *Piece);
+bool O_Rotation(Piece_t *Piece);
+bool I_Rotation(Piece_t *Piece);
+bool DefaultClockRot(Piece_t *Piece);
+bool DefaultCounterClockRot(Piece_t *Piece);
+bool IsValidLocation(const Piece_t *Piece);
 void AddPieceToGameGrid(const Piece_t Piece);
-bool Z_Rotation(Piece_t * Piece);
-bool S_Rotation(Piece_t * Piece);
-bool O_Rotation(Piece_t * Piece);
-bool I_Rotation(Piece_t * Piece);
-bool DefaultClockRot(Piece_t * Piece);
-bool DefaultCounterClockRot(Piece_t * Piece);
+Piece_t GetRandomPiece();
 void ClearFullRows();
+void NewGameRoutine();
 void EndOfTurnRoutine();
+void GameOverRoutine();
 
 #endif // __LOGIC_H__

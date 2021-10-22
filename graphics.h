@@ -8,6 +8,11 @@
 #define GAME_GRID_BLOCK_SIZE 30
 #define SIDE_GRID_BLOCK_SIZE 15
 
-void DrawWindow();
+void DisplayGame();
+void DisplayMenu();
+void DisplayControlBox();
+void DisplayGameOverBox();
+void DisplayNewBestBox();
+void DisplayPauseBox();
 
 #endif // __GRAPHICS_H__
