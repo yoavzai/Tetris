@@ -7,7 +7,7 @@
 
 typedef uint8_t NumGrid_t[5][3];
 
-static char GameGridCopy[GAME_GRID_ROWS + 2*GAME_GRID_PAD][GAME_GRID_COLS + 2*GAME_GRID_PAD];
+static uint8_t GameGridCopy[GAME_GRID_ROWS + 2*GAME_GRID_PAD][GAME_GRID_COLS + 2*GAME_GRID_PAD];
 
 static NumGrid_t Zero = {
     {9,9,9},
@@ -145,11 +145,7 @@ static void PrintGameArea()
             int left = WindowCol * GAME_GRID_BLOCK_SIZE;
             int right = left + GAME_GRID_BLOCK_SIZE;
             RECT Block = {left, top, right, bottom};
-            HBRUSH Brush = CreateSolidBrush(Game.ColorTable[GameGridCopy[Row][Col]]);
-            HDC dc =  GetDC(Game.Window);
-            FillRect(dc, &Block, Brush);
-            ReleaseDC(Game.Window, dc);
-            DeleteObject(Brush);
+            FillRect(Game.WindowDC, &Block, Game.BrushTable[GameGridCopy[Row][Col]]);
         }
     }
 }
@@ -165,11 +161,7 @@ static void PrintSideGrid()
             int left = WindowCol * SIDE_GRID_BLOCK_SIZE;
             int right = left + SIDE_GRID_BLOCK_SIZE;
             RECT Block = {left, top, right, bottom};
-            HBRUSH Brush = CreateSolidBrush(Game.ColorTable[Game.SideGrid[Row][Col]]);
-            HDC dc =  GetDC(Game.Window);
-            FillRect(dc, &Block, Brush);
-            ReleaseDC(Game.Window, dc);
-            DeleteObject(Brush);
+            FillRect(Game.WindowDC, &Block, Game.BrushTable[Game.SideGrid[Row][Col]]);
         }
     }
 }
@@ -228,10 +220,21 @@ static void AddBestScoreToSideGrid()
     }
 };
 
+static void ClearLowerSideGrid()
+{
+    for (int Row = 27; Row < SIDE_GRID_ROWS-2; ++Row)
+    {
+        for (int Col = 0; Col < SIDE_GRID_COLS-2; ++Col)
+        {
+            Game.SideGrid[Row][Col] = 0;
+        } 
+    }
+}
+
 void DisplayMenu()
 {
-    InitSideGrid();
     AddScoreToSideGrid();
+    ClearLowerSideGrid();
     AddSideGridBestText();
     AddBestScoreToSideGrid();
 
@@ -241,13 +244,8 @@ void DisplayMenu()
 
 void DisplayGame()
 {
-    /* 
-    TODO: try and remove InitSideGrid() from here
-    because this function is used frequently
-    */
-   
-    InitSideGrid();
     AddScoreToSideGrid();
+    ClearLowerSideGrid();
     AddSideGridNextText();
     AddNextPieceToSideGrid();
   

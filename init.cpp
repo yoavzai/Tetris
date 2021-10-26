@@ -284,6 +284,13 @@ static void InitColorTable()
     Game.ColorTable[WHITE_COLOR_IDX] = WHITE_COLOR;
 }
 
+static void InitBrushTable()
+{
+    for (int i = 0; i < NUM_OF_COLORS; ++i)
+    {
+        Game.BrushTable[i] = CreateSolidBrush(Game.ColorTable[i]);
+    }
+}
 
 void InitNewGame()
 {
@@ -301,7 +308,10 @@ void InitGame(HINSTANCE ProcInstance, WNDPROC MessagesCallbackFunc)
     InitPieces();
     InitLevelTimeTable();
     InitColorTable();
+    InitBrushTable();
+    InitSideGrid();
     Game.Running = true;
     Game.BestScore = 0;
     InitWindow(ProcInstance, MessagesCallbackFunc);
+    Game.WindowDC = GetDC(Game.Window);
 }

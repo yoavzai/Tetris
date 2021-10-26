@@ -265,7 +265,7 @@ void NewGameRoutine()
     InitNewGame();
     DisplayGame();
     DisplayControlsBox();
-    // add option to pick starting level
+    // TODO: add option to pick starting level
 }
 
 void GameOverRoutine()
@@ -281,4 +281,14 @@ void GameOverRoutine()
         DisplayMenu();
         DisplayGameOverBox();
     }
+}
+
+void ResetTurnTime()
+{
+    Game.EndOfTurnTime = GetTickCount() + Game.LevelTimeTable[Game.Level];
+}
+
+bool TurnOver()
+{
+    return (GetTickCount() >= Game.EndOfTurnTime);
 }

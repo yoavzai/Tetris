@@ -96,11 +96,13 @@ struct Piece
 struct Game
 {
     HWND Window;
+    HDC WindowDC;
     uint8_t GameGrid[GAME_GRID_ROWS + 2*GAME_GRID_PAD][GAME_GRID_COLS + 2*GAME_GRID_PAD];
     uint8_t SideGrid[SIDE_GRID_ROWS][SIDE_GRID_COLS];
     Piece_t Pieces[NUM_OF_PIECES];
     uint32_t LevelTimeTable[NUM_OF_LEVELS];
     uint32_t ColorTable[NUM_OF_COLORS];
+    HBRUSH BrushTable[NUM_OF_COLORS];
     bool Running;
     bool Over;
     Piece_t CurPiece;
@@ -129,5 +131,7 @@ void ClearFullRows();
 void NewGameRoutine();
 void EndOfTurnRoutine();
 void GameOverRoutine();
+void ResetTurnTime();
+bool TurnOver();
 
 #endif // __LOGIC_H__
