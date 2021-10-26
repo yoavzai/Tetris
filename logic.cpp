@@ -185,16 +185,26 @@ static bool RowOcupied(int Row)
     return false;
 }
 
-static void UpdateGameStats()
+static void UpdateScore(uint8_t NumOfFullRows)
 {
-    static uint8_t CurLevelLineCount = 0;
-    Game.Score += 1;            
-    CurLevelLineCount += 1;
-    if (Game.Level < NUM_OF_LEVELS-1 && CurLevelLineCount >= LINES_PER_LEVEL)
+    Game.Score += ((Game.Level + 2) * NumOfFullRows * NumOfFullRows);
+}
+
+static void UpdateLevel(uint8_t NumOfFullRows)
+{
+    static uint32_t CurLevelLineCount = 0;
+    CurLevelLineCount += NumOfFullRows;
+    if ((Game.Level < NUM_OF_LEVELS-1) && (CurLevelLineCount >= LINES_PER_LEVEL))
     {
         CurLevelLineCount -= LINES_PER_LEVEL;
         Game.Level += 1;           
     }
+}
+
+static void UpdateGameStats(uint8_t NumOfFullRows)
+{
+    UpdateScore(NumOfFullRows);
+    UpdateLevel(NumOfFullRows);
 }
 
 static void DropRows(int DestRow)
@@ -233,15 +243,17 @@ static bool RowIsFull(int Row)
 
 void ClearFullRows()
 {
+    uint8_t NumOfFullRows = 0;
     for (int Row = GAME_GRID_PAD; Row < GAME_GRID_ROWS+GAME_GRID_PAD; ++Row)
     {
         if (RowIsFull(Row))
         {
+            NumOfFullRows += 1;
             ClearRow(Row);
             DropRows(Row);
-            UpdateGameStats();
         }
     }
+    UpdateGameStats(NumOfFullRows);
 }
 
 void EndOfTurnRoutine()

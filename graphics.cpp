@@ -78,14 +78,18 @@ static void AddScoreToSideGrid()
     NumGrid_t * Ones = Numbers[Game.Score % 10];
     NumGrid_t * Tens = Numbers[(Game.Score/10) % 10];
     NumGrid_t * Hundreds = Numbers[(Game.Score/100) % 10];
+    NumGrid_t * Thousands = Numbers[(Game.Score/1000) % 10];
+    NumGrid_t * TenThousands = Numbers[(Game.Score/10000) % 10];
 
     for (int i = 0, Row = 14; i < 5; ++i, ++Row)
     {
-        for (int j = 0, Col = 4; j < 3; ++j, ++Col)
+        for (int j = 0, Col = 1; j < 3; ++j, ++Col)
         {
-            Game.SideGrid[Row][Col] = (*Hundreds)[i][j];
-            Game.SideGrid[Row][Col+5] = (*Tens)[i][j];
-            Game.SideGrid[Row][Col+10] = (*Ones)[i][j];   
+            Game.SideGrid[Row][Col] = (*TenThousands)[i][j];
+            Game.SideGrid[Row][Col+4] = (*Thousands)[i][j];
+            Game.SideGrid[Row][Col+8] = (*Hundreds)[i][j];
+            Game.SideGrid[Row][Col+12] = (*Tens)[i][j];
+            Game.SideGrid[Row][Col+16] = (*Ones)[i][j];   
         }
          
     }
@@ -207,14 +211,18 @@ static void AddBestScoreToSideGrid()
     NumGrid_t * Ones = Numbers[Game.BestScore % 10];
     NumGrid_t * Tens = Numbers[(Game.BestScore/10) % 10];
     NumGrid_t * Hundreds = Numbers[(Game.BestScore/100) % 10];
+    NumGrid_t * Thousands = Numbers[(Game.BestScore/1000) % 10];
+    NumGrid_t * TenThousands = Numbers[(Game.BestScore/10000) % 10];
 
     for (int i = 0, Row = 35; i < 5; ++i, ++Row)
     {
-        for (int j = 0, Col = 4; j < 3; ++j, ++Col)
+        for (int j = 0, Col = 1; j < 3; ++j, ++Col)
         {
-            Game.SideGrid[Row][Col] = (*Hundreds)[i][j];
-            Game.SideGrid[Row][Col+5] = (*Tens)[i][j];
-            Game.SideGrid[Row][Col+10] = (*Ones)[i][j];   
+            Game.SideGrid[Row][Col] = (*TenThousands)[i][j];
+            Game.SideGrid[Row][Col+4] = (*Thousands)[i][j];
+            Game.SideGrid[Row][Col+8] = (*Hundreds)[i][j];
+            Game.SideGrid[Row][Col+12] = (*Tens)[i][j];
+            Game.SideGrid[Row][Col+16] = (*Ones)[i][j];   
         }
          
     }

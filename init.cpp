@@ -54,13 +54,20 @@ static void InitWindow(HINSTANCE ProcInstance, WNDPROC MessagesCallbackFunc)
         OutputDebugString("Window Class not Registered in RegisterClass function call");
     }
 
+    int XMiddleOfScreen = GetSystemMetrics(SM_CXSCREEN) / 2;
+    int YMiddleOfScreen = GetSystemMetrics(SM_CYSCREEN) / 2;
+    int Width = 720;
+    int Height = 690;
+    int X = XMiddleOfScreen - (Width / 2);
+    int Y = YMiddleOfScreen - (Height / 2);
+
     Game.Window =
     CreateWindowEx(
         0, // ExStyle
         WindowClass.lpszClassName, //ClassName
-        "Tetris Window", // WindowName
+        "Yoav's Tetris", // WindowName
         WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_VISIBLE, // Style
-        330, 30, 720, 690, // Position
+        X, Y, Width, Height, // Position
         0, // Parent
         0, // Menu
         ProcInstance, // ModuleInstance

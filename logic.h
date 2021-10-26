@@ -109,8 +109,8 @@ struct Game
     Piece_t NextPiece;
     uint32_t EndOfTurnTime;
     uint8_t Level;
-    uint16_t Score;
-    uint16_t BestScore;
+    uint32_t Score;
+    uint32_t BestScore;
 };
 
 extern Game_t Game;
